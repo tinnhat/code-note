@@ -19,6 +19,7 @@ import {
 } from '@codesandbox/sandpack-react'
 import CodeMirror from '@uiw/react-codemirror'
 import { useEffect, useState } from 'react'
+import ModalAddNewFile from '../Modal/AddNewFile'
 
 interface CustomCodeEditorProps {
   activeFile: string
@@ -59,7 +60,11 @@ const CustomCodeEditor = ({ activeFile, files, setFiles }: CustomCodeEditorProps
 }
 
 const EditorReact = () => {
-  const [files, setFiles] = useState({
+  const [files, setFiles] = useState<{
+    [key: string]: {
+      code: string
+    }
+  }>({
     '/App.js': {
       code: `import React from 'react';
 import './styles.css';
@@ -90,93 +95,10 @@ body {
     },
     '/button.jsx': {
       code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button2.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button4.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button5.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button6.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button7.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button8.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-    '/button9.jsx': {
-      code: `import React from 'react'
-
-export default function Button({ onClick, children }) {
-console.log("Button component rendered!");
+export default function Button({ children }) {
+      const onClick = () => {
+        console.log('Button clicked!');
+      };
   return (
     <button onClick={onClick} className="button">
       {children}
@@ -187,6 +109,7 @@ console.log("Button component rendered!");
   })
 
   const [activeFile, setActiveFile] = useState('/App.js')
+  const [showModal, setShowModal] = useState(false)
 
   //save file
   // const saveFiles = () => {
@@ -194,48 +117,50 @@ console.log("Button component rendered!");
   // }
 
   return (
-    <div className='w-full h-full min-h-screen flex flex-col bg-gray-900 text-white p-4'>
-      <SandpackProvider template='react' files={files}>
-        {/* <SandpackLayout className="flex w-full h-full space-x-4"> */}
-        <div className='flex w-full h-full gap-4'>
-          <div className='w-1/2 h-full bg-gray-800 rounded p-2'>
-            <div className='flex space-x-4 mb-2'>
-              <div className='w-4/5'>
-                <Select defaultValue={activeFile} onValueChange={value => setActiveFile(value)}>
-                  <SelectTrigger className='w-full bg-gray-700 text-white border-gray-600 hover:bg-gray-600 focus:ring-gray-500'>
-                    <SelectValue placeholder='Select a file' />
-                  </SelectTrigger>
-                  <SelectContent className='bg-gray-700 border-gray-600'>
-                    {Object.keys(files).map(file => (
-                      <SelectItem
-                        key={file}
-                        value={file}
-                        className='text-white hover:bg-gray-600 focus:bg-gray-600'
-                      >
-                        {file}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+    <>
+      <div className='w-full h-full min-h-screen flex flex-col bg-gray-900 text-white p-4'>
+        <SandpackProvider template='react' files={files}>
+          {/* <SandpackLayout className="flex w-full h-full space-x-4"> */}
+          <div className='flex w-full h-full gap-4'>
+            <div className='w-1/2 h-full bg-gray-800 rounded p-2'>
+              <div className='flex space-x-4 mb-2'>
+                <div className='w-4/5'>
+                  <Select defaultValue={activeFile} onValueChange={value => setActiveFile(value)}>
+                    <SelectTrigger className='w-full bg-gray-700 text-white border-gray-600 hover:bg-gray-600 focus:ring-gray-500'>
+                      <SelectValue placeholder='Select a file' />
+                    </SelectTrigger>
+                    <SelectContent className='bg-gray-700 border-gray-600'>
+                      {Object.keys(files).map(file => (
+                        <SelectItem
+                          key={file}
+                          value={file}
+                          className='text-white hover:bg-gray-600 focus:bg-gray-600'
+                        >
+                          {file}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className='w-1/5 text-right'>
+                  <Button onClick={() => setShowModal(true)}>Add</Button>
+                </div>
               </div>
-              <div className='w-1/5 text-right'>
-                <Button>Add</Button>
-              </div>
+
+              <CustomCodeEditor activeFile={activeFile} files={files} setFiles={setFiles} />
             </div>
 
-            <CustomCodeEditor activeFile={activeFile} files={files} setFiles={setFiles} />
-          </div>
-
-          <div className='w-1/2 h-screen bg-black p-2 rounded'>
-            <SandpackPreview className='h-4/5' />
-            <div className='h-1/5 bg-gray-900 rounded mt-4 overflow-auto'>
-              <SandpackConsole className='h-full w-full' />
+            <div className='w-1/2 h-screen bg-black p-2 rounded'>
+              <SandpackPreview className='h-4/5' />
+              <div className='h-1/5 bg-gray-900 rounded mt-4 overflow-auto'>
+                <SandpackConsole className='h-full w-full' />
+              </div>
             </div>
           </div>
-        </div>
-      </SandpackProvider>
-    </div>
+        </SandpackProvider>
+      </div>
+      <ModalAddNewFile show={showModal} setShowModal={setShowModal} setFiles={setFiles} />
+    </>
   )
 }
-
 export default EditorReact

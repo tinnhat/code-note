@@ -1,7 +1,9 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import EditorHtmlCssJS from './components/htmlCssJs'
+// import EditorHtmlCssJS from './components/htmlCssJs'
 import EditorReact from './components/reactjs'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 function DetailPage() {
   return (
@@ -12,12 +14,15 @@ function DetailPage() {
             <h1 className='text-2xl font-bold w-4/5'>
               Css scroll snap - Responsive scroll ngang tren mobile
             </h1>
+            {/* <Input/> */}
             <div className='w-1/5 flex items-center gap-4 justify-end'>
               <Button>Save</Button>
               <Button variant={'secondary'}>Edit</Button>
               <Button variant={'destructive'}>Delete</Button>
             </div>
           </div>
+         
+          {/* <Textarea/> */}
           <p className='text-xs mb-4'>13:00:00 - 22/12/2025</p>
           <p className='text-left'>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus deleniti, nisi nemo vero
@@ -32,6 +37,7 @@ function DetailPage() {
         </div>
         {/* <EditorHtmlCssJS /> */}
         <EditorReact/>
+
       </div>
     </div>
   )
