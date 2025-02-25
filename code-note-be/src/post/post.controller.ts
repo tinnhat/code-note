@@ -8,18 +8,18 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { PostService } from './providers/post.service';
 import { PatchPostDto } from './dto/patch-post.dto';
+import { PostService } from './providers/post.service';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
   @Get()
-  findAll() {
+  getAll() {
     return this.postService.getAllPost();
   }
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: string) {
     return this.postService.getPostById(id);
   }
 
@@ -31,9 +31,9 @@ export class PostController {
   // update(@Param('id') id: string) {
   //   return 'This action updates a #cat';
   // }
-  @Patch()
-  patchPost(@Body() patchPostDto: PatchPostDto) {
-    return patchPostDto;
+  @Patch(':id')
+  patchPost(@Param('id') id: string, @Body() patchPostDto: PatchPostDto) {
+    return this.postService.updatePost(id, patchPostDto);
   }
 
   @Delete(':id')

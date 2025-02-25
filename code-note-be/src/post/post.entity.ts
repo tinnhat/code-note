@@ -1,9 +1,10 @@
-import { Column, Entity, ObjectId, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongodb';
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class Post {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId | string;
 
   @Column()
   title: string;
@@ -11,6 +12,6 @@ export class Post {
   @Column()
   description: string;
 
-  @Column()
+  @Column('')
   code: string[];
 }
