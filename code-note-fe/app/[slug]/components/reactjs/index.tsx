@@ -49,7 +49,7 @@ function convertBack(files: { [key: string]: FileItem }): OutputItem[] {
 }
 
 const convertData = (data: any) => {
-  return data.reduce((acc, item) => {
+  return data.reduce((acc: { [x: string]: { code: any } }, item: { key: string | number; value: any }) => {
     acc[item.key] = {
       code: item.value,
     }
