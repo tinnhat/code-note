@@ -8,3 +8,8 @@ export default function ${componentName}() {
   )
 }`
 }
+
+export const TYPE_CODE = {
+  HTML_CSS_JS: 'html-css-js',
+  REACTJS: 'reactjs',
+}

@@ -18,7 +18,7 @@ import {
   useSandpack,
 } from '@codesandbox/sandpack-react'
 import CodeMirror from '@uiw/react-codemirror'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ModalAddNewFile from '../Modal/AddNewFile'
 
 interface CustomCodeEditorProps {
@@ -29,9 +29,34 @@ interface CustomCodeEditorProps {
     }
   }
   setFiles: any
+  edit: boolean
 }
 
-const CustomCodeEditor = ({ activeFile, files, setFiles }: CustomCodeEditorProps) => {
+interface FileItem {
+  code: string
+}
+
+interface OutputItem {
+  key: string
+  value: string
+}
+
+function convertBack(files: { [key: string]: FileItem }): OutputItem[] {
+  return Object.entries(files).map(([key, value]) => ({
+    key,
+    value: value.code,
+  }))
+}
+
+const convertData = (data: any) => {
+  return data.reduce((acc, item) => {
+    acc[item.key] = {
+      code: item.value,
+    }
+    return acc
+  }, {})
+}
+const CustomCodeEditor = ({ activeFile, files, setFiles, edit }: CustomCodeEditorProps) => {
   const { sandpack } = useSandpack()
   const [code, setCode] = useState(files[activeFile]?.code || '')
 
@@ -50,6 +75,7 @@ const CustomCodeEditor = ({ activeFile, files, setFiles }: CustomCodeEditorProps
 
   return (
     <CodeMirror
+      readOnly={edit}
       value={code}
       height='100vh'
       theme='dark'
@@ -59,62 +85,39 @@ const CustomCodeEditor = ({ activeFile, files, setFiles }: CustomCodeEditorProps
   )
 }
 
-const EditorReact = () => {
+type Props = {
+  code: CodeItem[]
+  edit: boolean
+  setPost: React.Dispatch<React.SetStateAction<Post | null>>
+}
+const EditorReact = ({ code, edit, setPost }: Props) => {
   const [files, setFiles] = useState<{
     [key: string]: {
       code: string
     }
-  }>({
-    '/App.js': {
-      code: `import React from 'react';
-import './styles.css';
-import Button from './button';
-
-export default function App() {
-  return (
-    <div className="app">
-      <h1>Hello React</h1>
-      <Button>Click me</Button>
-    </div>
-  );
-}`,
-    },
-    '/styles.css': {
-      code: `.app {
-  padding: 20px;
-  text-align: center;
-  height: 100vh;
-
-}
-
-body {
-  background-color: #222;
-  color: white;
-  font-family: sans-serif;
-}`,
-    },
-    '/button.jsx': {
-      code: `import React from 'react'
-export default function Button({ children }) {
-      const onClick = () => {
-        console.log('Button clicked!');
-      };
-  return (
-    <button onClick={onClick} className="button">
-      {children}
-    </button>
-  );
-}`,
-    },
-  })
+  }>({})
 
   const [activeFile, setActiveFile] = useState('/App.js')
   const [showModal, setShowModal] = useState(false)
 
-  //save file
-  // const saveFiles = () => {
-  //   console.log('Saving files:', files)
-  // }
+  useEffect(() => {
+    if (code) {
+      const dataConvert = convertData(code)
+      setFiles(dataConvert)
+    }
+  }, [edit])
+
+  useEffect(() => {
+    if (files) {
+      setPost(
+        prev =>
+          ({
+            ...prev,
+            code: convertBack(files),
+          } as Post)
+      )
+    }
+  }, [files])
 
   return (
     <>
@@ -143,11 +146,18 @@ export default function Button({ children }) {
                   </Select>
                 </div>
                 <div className='w-1/5 text-right'>
-                  <Button onClick={() => setShowModal(true)}>Add</Button>
+                  <Button disabled={!edit} onClick={() => setShowModal(true)}>
+                    Add
+                  </Button>
                 </div>
               </div>
 
-              <CustomCodeEditor activeFile={activeFile} files={files} setFiles={setFiles} />
+              <CustomCodeEditor
+                edit={!edit}
+                activeFile={activeFile}
+                files={files}
+                setFiles={setFiles}
+              />
             </div>
 
             <div className='w-1/2 h-screen bg-black p-2 rounded'>
@@ -163,4 +173,4 @@ export default function Button({ children }) {
     </>
   )
 }
-export default EditorReact
+export default React.memo(EditorReact)

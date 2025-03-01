@@ -22,10 +22,10 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
-    origin: '*', // Chỉ cho phép nguồn này
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Phương thức được phép
-    allowedHeaders: 'Content-Type, Accept', // Header được phép
-    credentials: true, // Cho phép gửi cookie hoặc thông tin xác thực
+    origin: '*', // Cho phép tất cả nguồn
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: '*', // Cho phép tất cả header (thay vì chỉ Content-Type, Accept)
+    credentials: false,
   });
   await app.listen(process.env.PORT ?? 4000);
 }

@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { toast } from 'sonner'
 
 type Props = {
   show: boolean
@@ -28,12 +29,16 @@ export default function ModalAddNewFile({ show, setShowModal, setFiles }: Props)
     // Validate for React component naming convention:
     // Must start with uppercase letter and only contain letters, numbers
     if (!/^[A-Z][a-zA-Z0-9]*$/.test(value)) {
+      toast.error('Invalid file name')
       return
     }
+    const convertValue = `/${value}.js`
     setFiles((prev: object) => ({
       ...prev,
-      [value]: { code: generateDefaultComponent(value) },
+      [convertValue]: { code: generateDefaultComponent(value) },
     }))
+    setValue('')
+    setShowModal(false)
   }
   return (
     <Dialog open={show} onOpenChange={open => setShowModal(open)}>

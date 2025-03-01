@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import HeaderCus from './components/header'
 import Footer from './components/footer'
-
+import { Toaster } from 'sonner'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -30,6 +30,7 @@ export default function RootLayout({
         <HeaderCus />
         {children}
         <Footer/>
+        <Toaster />
       </body>
     </html>
   )

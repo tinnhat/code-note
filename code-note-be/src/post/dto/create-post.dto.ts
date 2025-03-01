@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { CodeItemDto } from './code-item.dts';
 
 export class CreatePostDto {
   @IsString()
@@ -11,6 +13,10 @@ export class CreatePostDto {
   description: string;
 
   @IsArray()
-  @IsString({ each: true }) // Đảm bảo tất cả phần tử trong mảng là string
-  code: string[];
+  @ValidateNested({ each: true }) // Kiểm tra từng phần tử trong mảng
+  @Type(() => CodeItemDto) // Chuyển đổi mỗi phần tử thành CodeItemDto
+  code: CodeItemDto[];
+  @IsString()
+  @IsNotEmpty()
+  type: string;
 }

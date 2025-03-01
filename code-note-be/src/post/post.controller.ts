@@ -38,6 +38,6 @@ export class PostController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return 'This action removes a #cat';
+    return this.postService.deletePost(id);
   }
 }

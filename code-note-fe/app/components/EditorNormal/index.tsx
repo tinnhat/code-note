@@ -7,12 +7,13 @@ type Props = {
   onChange: (newValue: string) => void
   language: string
   theme: string
+  readOnly: boolean
 }
 
-function EditorNormal({ value, onChange, language, theme }: Props) {
+function EditorNormal({ value, onChange, language, theme, readOnly }: Props) {
+  
   return (
     <div>
-      <h2 className='text-center uppercase'>{language}</h2>
       <MonacoEditor
         height='90vh'
         language={language}
@@ -23,6 +24,9 @@ function EditorNormal({ value, onChange, language, theme }: Props) {
           }
         }}
         theme={theme}
+        options={{
+          readOnly,
+        }}
       />
     </div>
   )
@@ -30,4 +34,4 @@ function EditorNormal({ value, onChange, language, theme }: Props) {
 
 EditorNormal.propTypes = {}
 
-export default EditorNormal
+export default React.memo(EditorNormal)

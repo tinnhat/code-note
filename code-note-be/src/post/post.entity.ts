@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { CodeItemDto } from './dto/code-item.dts';
 
 @Entity()
 export class Post {
@@ -12,6 +13,9 @@ export class Post {
   @Column()
   description: string;
 
-  @Column('')
-  code: string[];
+  @Column('json') // Dùng type 'json' để lưu mảng object
+  code: CodeItemDto[];
+
+  @Column()
+  type: string;
 }

@@ -63,4 +63,12 @@ export class PostService {
       throw new BadRequestException(`Failed to update post`);
     }
   }
+
+  public async deletePost(id: string) {
+    try {
+      return await this.postRepository.delete({ _id: new ObjectId(id) });
+    } catch (error) {
+      throw new BadRequestException(`Failed to delete post`);
+    }
+  }
 }
