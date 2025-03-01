@@ -14,7 +14,7 @@ function Post({ item, refresh }: Props) {
         variant='destructive'
         className='absolute top-2 right-2'
         onClick={async () => {
-          const response = await fetch(`http://localhost:4000/post/${item._id}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${item._id}`, {
             method: 'DELETE',
           })
           if (response.ok) {

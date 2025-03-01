@@ -19,7 +19,7 @@ export default function DetailPage() {
   const { slug } = params // slug là id của post
 
   async function fetchPost(id: string) {
-    const res = await fetch(`http://localhost:4000/post/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${id}`, {
       cache: 'no-store', // Tắt cache để lấy dữ liệu mới nhất
     })
     if (!res.ok) throw new Error('Post not found')
@@ -65,7 +65,7 @@ export default function DetailPage() {
       code: post.code,
     }
 
-    fetch(`http://localhost:4000/post/${post._id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${post._id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

@@ -110,7 +110,7 @@ export default function ModalAddNewCode({ show, setShowModal, refresh }: Props) 
       toast.error('Please enter title and description')
       return
     }
-    fetch('http://localhost:4000/post', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

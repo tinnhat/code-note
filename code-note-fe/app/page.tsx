@@ -9,7 +9,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false)
 
   const getAllPost = () => {
-    fetch('http://localhost:4000/post', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/post`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export default function Home() {
           </Button>
         </div>
         <div className='mt-10 flex flex-wrap gap-4'>
-          {listPost.map((item, idx) => (
+          {listPost && listPost.map((item, idx) => (
             <Post item={item} key={idx} refresh={getAllPost} />
           ))}
         </div>

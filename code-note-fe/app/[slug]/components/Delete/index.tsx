@@ -12,7 +12,7 @@ export default function DeletePost({ _id }: Props) {
   const router = useRouter()
 
   const handleDelete = async (_id: string) => {
-    fetch(`http://localhost:4000/post/${_id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/${_id}`, {
       method: 'DELETE',
     })
       .then(res => res.json())
